@@ -1,0 +1,32 @@
+{
+    "name": "chrisshick/cakephp3-html-purifier",
+    "type": "cakephp-plugin",
+    "description": "This is a CakePHP3 Purifier Plugin Behavior that cleanses data before it is marshalled into the entity.",
+    "keywords": ["cakephp", "cakephp3", "plugin", "htmlpurifier", "purifier", "fields", "entities"],
+    "homepage": "https://github.com/chrisShick/CakePHP3-HtmlPurifier",
+    "require": {
+        "php": ">=5.4.0",
+        "ezyang/htmlpurifier": "*"
+    },
+    "require-dev": {
+      "cakephp/cakephp": "3.0.*-dev",
+      "phpunit/phpunit": "4.1.*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chris Hickingbottom",
+            "email": "chris@pharmedio.com"
+        }
+    ],
+    "autoload": {
+      "psr-4": {
+        "ChrisShick\\CakePHP3HtmlPurifier\\": "src"
+      }
+    },
+    "autoload-dev": {
+      "psr-4": {
+        "ChrisShick\\CakePHP3HtmlPurifier\\Test\\": "tests"
+      }
+    }
+}
