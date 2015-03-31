@@ -2,6 +2,9 @@
 This plugin is a sanitizer for entity data that uses the Html Purifier Library: http://htmlpurifier.org/
 
 HTML Purifier is a standards-compliant HTML filter library written in PHP. HTML Purifier will not only remove all malicious code (better known as XSS) with a thoroughly audited, secure yet permissive whitelist, it will also make sure your documents are standards compliant, something only achievable with a comprehensive knowledge of W3C's specifications.
+
+## Recognition
+  I have to give credit to @josegonzalez for giving me the inspiration to write this based on his Purifiable Behavior.
 ## Requirements
   - CakePHP 3.x
   - PHP >= 5.4.16
@@ -13,7 +16,7 @@ You can install this plugin into your CakePHP application using [composer](http:
 The recommended way to install composer packages is:
 
 ```
-composer require chrisshick/cakephp3-html-purifier
+  composer require chrisshick/cakephp3-html-purifier
 ```
 or add the plugin to your project's ``` composer.json ``` like this:
 ```
