@@ -21,12 +21,12 @@
     ],
     "autoload": {
       "psr-4": {
-        "chrisShick\\CakePHP3HtmlPurifier\\": "src"
+        "ChrisShick\\CakePHP3HtmlPurifier\\": "src"
       }
     },
     "autoload-dev": {
       "psr-4": {
-        "chrisShick\\CakePHP3HtmlPurifier\\Test\\": "tests"
+        "ChrisShick\\CakePHP3HtmlPurifier\\Test\\": "tests"
       }
     }
 }
