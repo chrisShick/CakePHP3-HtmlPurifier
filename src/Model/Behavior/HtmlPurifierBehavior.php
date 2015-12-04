@@ -24,13 +24,8 @@ class HtmlPurifierBehavior extends Behavior
             'touch' => 'touch'
         ],
         'events' => [
-            'Model.beforeSave' => [
-                'created' => 'always',
-                'modified' => 'always'
-            ],
-            'Model.beforeMarshal' => [
-                'created' => 'always'
-            ]
+            'Model.beforeSave' => false,
+            'Model.beforeMarshal' => true,
         ],
         'fields' => [],
         'config' => [
@@ -100,20 +95,11 @@ class HtmlPurifierBehavior extends Behavior
     {
         $eventName = $event->name();
         $events = $this->_config['events'];
-        $new = $entity->isNew() !== false;
-        foreach ($events[$eventName] as $field => $when) {
-            if (!in_array($when, ['always', 'new', 'existing'])) {
-                throw new \UnexpectedValueException(
-                    sprintf('When should be one of "always", "new" or "existing". The passed value "%s" is invalid', $when)
-                );
-            }
-            if ($when === 'always' ||
-                ($when === 'new' && $new) ||
-                ($when === 'existing' && !$new)
-            ) {
-                $this->_purify($entity);
-            }
+        
+        if($events[$eventName] === true) {
+            $this->_purify($entity);
         }
+
         return true;
     }
     /**
