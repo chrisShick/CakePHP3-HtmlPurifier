@@ -19,10 +19,7 @@ class HtmlPurifierBehavior extends Behavior
      */
     protected $_defaultConfig = [
         'implementedFinders' => [],
-        'implementedMethods' => [
-            'timestamp' => 'timestamp',
-            'touch' => 'touch'
-        ],
+        'implementedMethods' => [],
         'events' => [
             'Model.beforeSave' => false,
             'Model.beforeMarshal' => true,
@@ -59,10 +56,12 @@ class HtmlPurifierBehavior extends Behavior
      */
     public function initialize(array $config)
     {
-        parent::initialize($config);
+        $merge_configs = ['events', 'fields', 'config', 'customFilters'];
 
-        if (isset($config['events'])) {
-            $this->config('events', $config['events'], false);
+        foreach($merge_configs as $field) {
+            if (isset($config[$field])) {
+                $this->config($field, $config[$field], false);
+            }
         }
 
         $purifier_config = HTMLPurifier_Config::createDefault();
