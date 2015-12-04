@@ -95,7 +95,7 @@ class HtmlPurifierBehavior extends Behavior
     {
         $eventName = $event->name();
         $events = $this->_config['events'];
-        
+
         if($events[$eventName] === true) {
             $this->_purify($entity);
         }

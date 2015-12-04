@@ -70,6 +70,26 @@ class HtmlPurifierBehaviorTest extends TestCase
         $this->assertEquals(['name' => 'Foo', 'place' => ''], $entity->toArray());
     }
 
+    public function testMarshalFalse()
+    {
+        $table = $this->getMock('Cake\ORM\Table');
+        $this->Behavior = new HtmlPurifierBehavior($table,[
+            'events'=>[
+                'Model.beforeMarshal' => false
+            ],
+            'fields' => ['name','place']
+        ]);
+
+        $event = new Event('Model.beforeMarshal');
+        $expected = ['name' => 'Foo', 'place' => '<script>alert(Bar);</script>'];
+        $entity = new Entity($expected);
+        $return = $this->Behavior->handleEvent($event, $entity);
+
+        $this->assertTrue($return, 'Handle Event is expected to always return true');
+
+        $this->assertEquals($expected, $entity->toArray());
+    }
+
     public function testMarshalConfigChange()
     {
         $table = $this->getMock('Cake\ORM\Table');
@@ -114,6 +134,26 @@ class HtmlPurifierBehaviorTest extends TestCase
         $this->Behavior = new HtmlPurifierBehavior($table,['fields' => ['name','place']]);
 
         $event = new Event('Model.beforeSave');
+        $expected = ['name' => 'Foo', 'place' => '<span>Bar</span>'];
+        $entity = new Entity($expected);
+        $return = $this->Behavior->handleEvent($event, $entity);
+
+        $this->assertTrue($return, 'Handle Event is expected to always return true');
+
+        $this->assertEquals($expected, $entity->toArray());
+    }
+
+    public function testSaveEnabled()
+    {
+        $table = $this->getMock('Cake\ORM\Table');
+        $this->Behavior = new HtmlPurifierBehavior($table,[
+            'events' => [
+                'Model.beforeSave' => true
+            ],
+            'fields' => ['name','place']
+        ]);
+
+        $event = new Event('Model.beforeSave');
 
         $entity = new Entity(['name' => 'Foo', 'place' => '<span>Bar</span>']);
         $return = $this->Behavior->handleEvent($event, $entity);
@@ -127,6 +167,9 @@ class HtmlPurifierBehaviorTest extends TestCase
     {
         $table = $this->getMock('Cake\ORM\Table');
         $this->Behavior = new HtmlPurifierBehavior($table,[
+            'events' => [
+                'Model.beforeSave' => true
+            ],
             'fields' => ['name','place'],
             'config' => [
                 'AutoFormat' => [
@@ -149,7 +192,11 @@ class HtmlPurifierBehaviorTest extends TestCase
     public function testSaveNoFields()
     {
         $table = $this->getMock('Cake\ORM\Table');
-        $this->Behavior = new HtmlPurifierBehavior($table);
+        $this->Behavior = new HtmlPurifierBehavior($table,[
+            'events' => [
+                'Model.beforeSave' => true
+            ],
+        ]);
 
         $event = new Event('Model.beforeSave');
         $expected = ['name' => 'Foo', 'place' => '<span>Bar</span>'];
