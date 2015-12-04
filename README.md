@@ -6,7 +6,7 @@ HTML Purifier is a standards-compliant HTML filter library written in PHP. HTML 
 ## Recognition
   I have to give credit to @josegonzalez for giving me the inspiration to write this based on his Purifiable Behavior.
 ## Requirements
-  - CakePHP 3.x
+  - CakePHP 3.1.x
   - PHP >= 5.4.16
   
 ## Installation
@@ -40,6 +40,46 @@ To start sanitizing your data, you need to attach the behavior to your table in 
         'fields'=>['title','description']
     ]);
 ```
+By default the behavior purifies only on the beforeMarshal Event. To disable this, you should do the following:
+```
+   $this->addBehavior('chrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
+        'events' => [
+           Model.beforeMarshal => false,
+           // you can also uncomment the line below to turn on the purifier only on the beforeSave event
+           //Model.beforeSave => true,
+        ]
+   ]);
+```
+You can also have the purifier called on a custom event: 
+```
+    $this->addBehavior('chrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
+        'events' => [
+           Model.myCustomEvent => true,
+        ]
+   ]);
+```
+You can adjust the HtmlPurifier configuration by passing in the config key into the configuration:
+```
+   $this->addBehavior('chrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
+        'config' => [
+            'HTML' => [
+                'DefinitionID' => 'purifiable',
+                'DefinitionRev' => 1,
+                'TidyLevel' => 'heavy',
+                'Doctype' => 'XHTML 1.0 Transitional'
+            ],
+            'Core' => [
+                'Encoding' => 'UTF-8'
+            ],
+            'AutoFormat' => [
+                'RemoveSpansWithoutAttributes' => true,
+                'RemoveEmpty' => true
+            ],
+        ],
+   ]);
+```
+You can find all the configurable options and custom filters on the http://htmlpurifier.org/ website.
+
 
 ##License
 
