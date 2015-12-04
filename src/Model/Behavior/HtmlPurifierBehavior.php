@@ -1,8 +1,9 @@
 <?php
 namespace chrisShick\CakePHP3HtmlPurifier\Model\Behavior;
 
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Behavior;
-use Cake\ORM\Table;
+use Cake\Event\Event;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 /**
@@ -17,10 +18,21 @@ class HtmlPurifierBehavior extends Behavior
      * @var array
      */
     protected $_defaultConfig = [
+        'implementedFinders' => [],
+        'implementedMethods' => [
+            'timestamp' => 'timestamp',
+            'touch' => 'touch'
+        ],
+        'events' => [
+            'Model.beforeSave' => [
+                'created' => 'always',
+                'modified' => 'always'
+            ],
+            'Model.beforeMarshal' => [
+                'created' => 'always'
+            ]
+        ],
         'fields' => [],
-        'overwrite' => false,
-        'affix' => '_clean',
-        'affix_position' => 'suffix',
         'config' => [
             'HTML' => [
                 'DefinitionID' => 'purifiable',
@@ -41,9 +53,23 @@ class HtmlPurifierBehavior extends Behavior
 
     private $purifier;
 
+    /**
+     * Initialize hook
+     *
+     * If events are specified - do *not* merge them with existing events,
+     * overwrite the events to listen on
+     *
+     * @param array $config The config for this behavior.
+     * @return void
+     */
     public function initialize(array $config)
     {
         parent::initialize($config);
+
+        if (isset($config['events'])) {
+            $this->config('events', $config['events'], false);
+        }
+
         $purifier_config = HTMLPurifier_Config::createDefault();
         foreach ($this->config('config') as $namespace => $values) {
             foreach ($values as $key => $value) {
@@ -61,19 +87,63 @@ class HtmlPurifierBehavior extends Behavior
         $this->purifier = new HTMLPurifier($purifier_config);
     }
 
-    public function beforeMarshal(Event $event, \ArrayObject $data, \ArrayObject $options)
+    /**
+     * There is only one event handler, it can be configured to be called for any event
+     *
+     * @param \Cake\Event\Event $event Event instance.
+     * @param \Cake\Datasource\EntityInterface $entity Entity instance.
+     * @throws \UnexpectedValueException if a field's when value is misdefined
+     * @return true (irrespective of the behavior logic, the save will not be prevented)
+     * @throws \UnexpectedValueException When the value for an event is not 'always', 'new' or 'existing'
+     */
+    public function handleEvent(Event $event, EntityInterface $entity)
     {
-        $fields = $this->config('fields');
-        $purify = function(&$value,$key, $fields) use(&$purify){
-            if(is_array($value)){
-                if(array_key_exists($key,$fields)){
-                    array_walk($value, $purify, $fields[$key]);
-                }
-            } else if(in_array($key,$fields)){
-                $value = $this->purifier->purify($value);
+        $eventName = $event->name();
+        $events = $this->_config['events'];
+        $new = $entity->isNew() !== false;
+        foreach ($events[$eventName] as $field => $when) {
+            if (!in_array($when, ['always', 'new', 'existing'])) {
+                throw new \UnexpectedValueException(
+                    sprintf('When should be one of "always", "new" or "existing". The passed value "%s" is invalid', $when)
+                );
             }
-        };
-        array_walk($data,$purify, $fields);
+            if ($when === 'always' ||
+                ($when === 'new' && $new) ||
+                ($when === 'existing' && !$new)
+            ) {
+                $this->_purify($entity);
+            }
+        }
+        return true;
+    }
+    /**
+     * implementedEvents
+     *
+     * The implemented events of this behavior depend on configuration
+     *
+     * @return array
+     */
+    public function implementedEvents()
+    {
+        return array_fill_keys(array_keys($this->_config['events']), 'handleEvent');
     }
 
+
+    /**
+     * _purify
+     *
+     * The private method to purify the entity with the Html Purifier Library
+     *
+     * @param $entity
+     *
+     */
+    private function _purify($entity)
+    {
+        $fields = $this->config('fields');
+        $purify = function($value, $key, $entity) {
+            $return_value = $this->purifier->purify($entity->$value);
+            $entity->set($value,$return_value);
+        };
+        array_walk($fields,$purify, $entity);
+    }
 }
