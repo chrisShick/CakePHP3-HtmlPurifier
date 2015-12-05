@@ -1,5 +1,6 @@
 # CakePHP3-HtmlPurifier plugin
 [![Build Status](https://travis-ci.org/chrisShick/CakePHP3-HtmlPurifier.svg?branch=master)](https://travis-ci.org/chrisShick/CakePHP3-HtmlPurifier)
+
 This plugin is a sanitizer for entity data that uses the Html Purifier Library: http://htmlpurifier.org/
 
 HTML Purifier is a standards-compliant HTML filter library written in PHP. HTML Purifier will not only remove all malicious code (better known as XSS) with a thoroughly audited, secure yet permissive whitelist, it will also make sure your documents are standards compliant, something only achievable with a comprehensive knowledge of W3C's specifications.
