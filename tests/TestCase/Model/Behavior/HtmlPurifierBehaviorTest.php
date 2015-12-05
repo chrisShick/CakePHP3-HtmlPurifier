@@ -208,6 +208,25 @@ class HtmlPurifierBehaviorTest extends TestCase
         $this->assertEquals($expected, $entity->toArray());
     }
 
+    public function testCustomEvent()
+    {
+        $table = $this->getMock('Cake\ORM\Table');
+        $this->Behavior = new HtmlPurifierBehavior($table,[
+            'events'=>[
+                'Model.myCustomEvent' => true
+            ],
+            'fields' => ['name','place']
+        ]);
+
+        $event = new Event('Model.myCustomEvent');
+        $entity = new Entity(['name' => 'Foo', 'place' => '<script>alert(Bar);</script>']);
+        $return = $this->Behavior->handleEvent($event, $entity);
+
+        $this->assertTrue($return, 'Handle Event is expected to always return true');
+
+        $this->assertEquals(['name' => 'Foo', 'place' => ''], $entity->toArray());
+    }
+
     /**
      * tearDown method
      *
