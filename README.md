@@ -38,13 +38,13 @@ If you are already using ``` Plugin::loadAll(); ```, then you do not need to do 
 ##Usage
 To start sanitizing your data, you need to attach the behavior to your table in the initialization function and pass in the fields that you want to be sanitized: 
 ```
-    $this->addBehavior('chrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
+    $this->addBehavior('ChrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
         'fields'=>['title','description']
     ]);
 ```
 By default the behavior purifies only on the beforeMarshal Event. To disable this, you should do the following:
 ```
-   $this->addBehavior('chrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
+   $this->addBehavior('ChrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
         'events' => [
            Model.beforeMarshal => false,
            // you can also uncomment the line below to turn on the purifier only on the beforeSave event
@@ -54,7 +54,7 @@ By default the behavior purifies only on the beforeMarshal Event. To disable thi
 ```
 You can also have the purifier called on a custom event: 
 ```
-    $this->addBehavior('chrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
+    $this->addBehavior('ChrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
         'events' => [
            Model.myCustomEvent => true,
         ]
@@ -62,7 +62,7 @@ You can also have the purifier called on a custom event:
 ```
 You can adjust the HtmlPurifier configuration by passing in the config key into the configuration:
 ```
-   $this->addBehavior('chrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
+   $this->addBehavior('ChrisShick/CakePHP3HtmlPurifier.HtmlPurifier', [
         'config' => [
             'HTML' => [
                 'DefinitionID' => 'purifiable',
