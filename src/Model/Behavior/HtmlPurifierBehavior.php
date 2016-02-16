@@ -85,12 +85,10 @@ class HtmlPurifierBehavior extends Behavior
      * There is only one event handler, it can be configured to be called for any event
      *
      * @param \Cake\Event\Event $event Event instance.
-     * @param \Cake\Datasource\EntityInterface $entity Entity instance.
-     * @throws \UnexpectedValueException if a field's when value is misdefined
+     * @param \Cake\Datasource\EntityInterface|ArrayObject $entity Entity instance.
      * @return true (irrespective of the behavior logic, the save will not be prevented)
-     * @throws \UnexpectedValueException When the value for an event is not 'always', 'new' or 'existing'
      */
-    public function handleEvent(Event $event, EntityInterface $entity)
+    public function handleEvent(Event $event, $entity)
     {
         $eventName = $event->name();
         $events = $this->_config['events'];
@@ -126,8 +124,9 @@ class HtmlPurifierBehavior extends Behavior
     {
         $fields = $this->config('fields');
         $purify = function($value, $key, $entity) {
-            $return_value = $this->purifier->purify($entity->$value);
-            $entity->set($value,$return_value);
+            if (isset($entity[$value])) {
+                $entity[$value] = $this->purifier->purify($entity[$value]);
+            }
         };
         array_walk($fields,$purify, $entity);
     }
