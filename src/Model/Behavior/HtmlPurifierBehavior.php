@@ -43,7 +43,15 @@ class HtmlPurifierBehavior extends Behavior
         'customFilters' => []
     ];
 
-    private $purifier;
+    
+    /**
+     * The purifier object.
+     *
+     * Created in initialize()
+     *
+     * @var HTMLPurifier
+     */
+    protected $purifier;
 
     /**
      * Initialize hook
@@ -120,7 +128,7 @@ class HtmlPurifierBehavior extends Behavior
      * @param $entity
      *
      */
-    private function _purify($entity)
+    protected function _purify($entity)
     {
         $fields = $this->config('fields');
         $purify = function($value, $key, $entity) {
