@@ -71,13 +71,16 @@ class HtmlPurifierBehavior extends Behavior
                 $this->config($field, $config[$field], false);
             }
         }
+        
+        /* Ensure Definition ID is set for maybeGetRawHTMLDefinition() */
+        $definitionId = $this->config('config.HTML.DefinitionID') ?: 'purifiable';
+        $this->config('config.HTML.DefinitionID', $definitionId);
 
         /* Add custom HTML5 support, based on HTMLPurifier's HTML4 support */
         $html5 = ($this->config('config.HTML.Doctype') === 'HTML 5');
         if ($html5) {
             $this->config('config.HTML.Doctype', 'HTML 4.01 Transitional');
-            $defId = $this->config('config.HTML.DefinitionID');
-            $this->config('config.HTML.DefinitionID', $defId . '-html5');
+            $this->config('config.HTML.DefinitionID', $definitionId . '-html5');
         }
 
         /* Create config and populate */
