@@ -82,6 +82,9 @@ You can adjust the HtmlPurifier configuration by passing in the config key into 
 ```
 You can find all the configurable options and custom filters on the http://htmlpurifier.org/ website.
 
+###HTML5 support
+
+HTMLPurifier does not support HTML 5. However, the plugin incorporates work to add new elements (e.g. article, section, video, mark) to the HTML definition, based on HTML 4.01 Transitional, so HTMLPurifier won't strip them. To enable this functionality, specify the Doctype as 'HTML 5' in your configuration.
 
 ##License
 
