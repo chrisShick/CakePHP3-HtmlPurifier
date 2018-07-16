@@ -1,7 +1,6 @@
 <?php
 namespace chrisShick\CakePHP3HtmlPurifier\Model\Behavior;
 
-use Cake\Datasource\EntityInterface;
 use Cake\ORM\Behavior;
 use Cake\Event\Event;
 use HTMLPurifier;
@@ -68,29 +67,29 @@ class HtmlPurifierBehavior extends Behavior
 
         foreach($merge_configs as $field) {
             if (isset($config[$field])) {
-                $this->config($field, $config[$field], false);
+                $this->setConfig($field, $config[$field], false);
             }
         }
         
         /* Ensure Definition ID is set for maybeGetRawHTMLDefinition() */
-        $definitionId = $this->config('config.HTML.DefinitionID') ?: 'purifiable';
-        $this->config('config.HTML.DefinitionID', $definitionId);
+        $definitionId = $this->getConfig('config.HTML.DefinitionID') ?: 'purifiable';
+        $this->setConfig('config.HTML.DefinitionID', $definitionId);
 
         /* Add custom HTML5 support, based on HTMLPurifier's HTML4 support */
-        $html5 = ($this->config('config.HTML.Doctype') === 'HTML 5');
+        $html5 = ($this->getConfig('config.HTML.Doctype') === 'HTML 5');
         if ($html5) {
-            $this->config('config.HTML.Doctype', 'HTML 4.01 Transitional');
-            $this->config('config.HTML.DefinitionID', $definitionId . '-html5');
+            $this->setConfig('config.HTML.Doctype', 'HTML 4.01 Transitional');
+            $this->setConfig('config.HTML.DefinitionID', $definitionId . '-html5');
         }
 
         /* Create config and populate */
         $purifier_config = HTMLPurifier_Config::createDefault();
-        foreach ($this->config('config') as $namespace => $values) {
+        foreach ($this->getConfig('config') as $namespace => $values) {
             foreach ($values as $key => $value) {
                 $purifier_config->set("{$namespace}.{$key}", $value);
             }
         }
-        $customFilters = $this->config('customFilters');
+        $customFilters = $this->getConfig('customFilters');
         if (!empty($customFilters)) {
             $filters = array();
             foreach ($customFilters as $customFilter) {
@@ -113,12 +112,12 @@ class HtmlPurifierBehavior extends Behavior
      * There is only one event handler, it can be configured to be called for any event
      *
      * @param \Cake\Event\Event $event Event instance.
-     * @param \Cake\Datasource\EntityInterface|ArrayObject $entity Entity instance.
+     * @param \Cake\Datasource\EntityInterface|\ArrayObject $entity Entity instance.
      * @return true (irrespective of the behavior logic, the save will not be prevented)
      */
     public function handleEvent(Event $event, $entity)
     {
-        $eventName = $event->name();
+        $eventName = $event->getName();
         $events = $this->_config['events'];
 
         if($events[$eventName] === true) {
@@ -150,7 +149,7 @@ class HtmlPurifierBehavior extends Behavior
      */
     protected function _purify($entity)
     {
-        $fields = $this->config('fields');
+        $fields = $this->getConfig('fields');
         $purify = function($value, $key, $entity) {
             if (isset($entity[$value])) {
                 $entity[$value] = $this->purifier->purify($entity[$value]);

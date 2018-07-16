@@ -1,87 +1,53 @@
 <?php
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+
 // @codingStandardsIgnoreFile
 
-$findRoot = function () {
-    $root = dirname(__DIR__);
-    if (is_dir($root . '/vendor/cakephp/cakephp')) {
-        return $root;
-    }
+use Cake\Core\Configure;
+use Cake\Core\Plugin;
+use Cake\Datasource\ConnectionManager;
 
-    $root = dirname(dirname(__DIR__));
-    if (is_dir($root . '/vendor/cakephp/cakephp')) {
-        return $root;
-    }
-
-    $root = dirname(dirname(dirname(__DIR__)));
-    if (is_dir($root . '/vendor/cakephp/cakephp')) {
-        return $root;
-    }
+$findRoot = function ($root) {
+    do {
+        $lastRoot = $root;
+        $root = dirname($root);
+        if (is_dir($root . '/vendor/cakephp/cakephp')) {
+            return $root;
+        }
+    } while ($root !== $lastRoot);
+    throw new Exception('Cannot find the root of the application, unable to run tests');
 };
+$root = $findRoot(__FILE__);
+unset($findRoot);
+chdir($root);
 
-if (!defined('DS')) {
-    define('DS', DIRECTORY_SEPARATOR);
-}
-define('ROOT', $findRoot());
-define('APP_DIR', 'App');
-define('WEBROOT_DIR', 'webroot');
-define('APP', ROOT . '/tests/App/');
-define('CONFIG', ROOT . '/tests/config/');
-define('WWW_ROOT', ROOT . DS . WEBROOT_DIR . DS);
-define('TESTS', ROOT . DS . 'tests' . DS);
-define('TMP', ROOT . DS . 'tmp' . DS);
-define('LOGS', TMP . 'logs' . DS);
-define('CACHE', TMP . 'cache' . DS);
-define('CAKE_CORE_INCLUDE_PATH', ROOT . '/vendor/cakephp/cakephp');
-define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
-define('CAKE', CORE_PATH . 'src' . DS);
+require_once 'vendor/cakephp/cakephp/src/basics.php';
+require_once 'vendor/autoload.php';
 
-require ROOT . '/vendor/autoload.php';
-require CORE_PATH . 'config/bootstrap.php';
+define('ROOT', $root . DS . 'tests' . DS . 'test_app' . DS);
+define('APP', ROOT . 'App' . DS);
+define('TMP', sys_get_temp_dir() . DS);
+define('CONFIG', ROOT . DS . 'config'. DS);
 
-Cake\Core\Configure::write('App', ['namespace' => 'Crud\Test\App']);
-Cake\Core\Configure::write('debug', true);
+Configure::write('debug', true);
+Configure::write('App', ['namespace' => 'ChrisShick\CakePHP3HtmlPurifier\Test\App']);
 
-$TMP = new \Cake\Filesystem\Folder(TMP);
-$TMP->create(TMP . 'cache/models', 0777);
-$TMP->create(TMP . 'cache/persistent', 0777);
-$TMP->create(TMP . 'cache/views', 0777);
-
-$cache = [
-    'default' => [
-        'engine' => 'File'
-    ],
-    '_cake_core_' => [
-        'className' => 'File',
-        'prefix' => 'crud_myapp_cake_core_',
-        'path' => CACHE . 'persistent/',
-        'serialize' => true,
-        'duration' => '+10 seconds'
-    ],
-    '_cake_model_' => [
-        'className' => 'File',
-        'prefix' => 'crud_my_app_cake_model_',
-        'path' => CACHE . 'models/',
-        'serialize' => 'File',
-        'duration' => '+10 seconds'
-    ]
-];
-
-Cake\Cache\Cache::config($cache);
-Cake\Core\Configure::write('Session', [
-    'defaults' => 'php'
-]);
-
-Cake\Core\Plugin::load('Crud', ['path' => ROOT . DS, 'autoload' => true]);
-
-Cake\Routing\DispatcherFactory::add('Routing');
-Cake\Routing\DispatcherFactory::add('ControllerFactory');
-
-// Ensure default test connection is defined
 if (!getenv('db_dsn')) {
     putenv('db_dsn=sqlite:///:memory:');
 }
+ConnectionManager::setConfig('test', ['url' => getenv('db_dsn')]);
 
-Cake\Datasource\ConnectionManager::config('test', [
-    'url' => getenv('db_dsn'),
-    'timezone' => 'UTC'
+Plugin::load('ChrisShick/CakePHP3HtmlPurifier', [
+    'path' => dirname(dirname(__FILE__)) . DS,
 ]);

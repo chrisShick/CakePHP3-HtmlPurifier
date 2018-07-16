@@ -29,7 +29,7 @@ class HtmlPurifierBehaviorTest extends TestCase
      */
     public function testImplementedEventsDefault()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $this->Behavior = new HtmlPurifierBehavior($table);
         $expected = [
             'Model.beforeSave' => 'handleEvent',
@@ -46,7 +46,7 @@ class HtmlPurifierBehaviorTest extends TestCase
      */
     public function testImplementedEventsCustom()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $settings = ['events' => ['Something.special' => ['date_specialed' => 'always']]];
         $this->Behavior = new HtmlPurifierBehavior($table, $settings);
         $expected = [
@@ -57,7 +57,7 @@ class HtmlPurifierBehaviorTest extends TestCase
 
     public function testMarshalBasic()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $this->Behavior = new HtmlPurifierBehavior($table,['fields' => ['name','place']]);
 
         $event = new Event('Model.beforeMarshal');
@@ -72,7 +72,7 @@ class HtmlPurifierBehaviorTest extends TestCase
 
     public function testMarshalFalse()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $this->Behavior = new HtmlPurifierBehavior($table,[
             'events'=>[
                 'Model.beforeMarshal' => false
@@ -92,7 +92,7 @@ class HtmlPurifierBehaviorTest extends TestCase
 
     public function testMarshalConfigChange()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $this->Behavior = new HtmlPurifierBehavior($table,[
             'fields' => ['name','place'],
             'config' => [
@@ -115,7 +115,7 @@ class HtmlPurifierBehaviorTest extends TestCase
 
     public function testMarshalNoFields()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $this->Behavior = new HtmlPurifierBehavior($table);
 
         $event = new Event('Model.beforeMarshal');
@@ -130,7 +130,7 @@ class HtmlPurifierBehaviorTest extends TestCase
 
     public function testSaveBasic()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $this->Behavior = new HtmlPurifierBehavior($table,['fields' => ['name','place']]);
 
         $event = new Event('Model.beforeSave');
@@ -145,7 +145,7 @@ class HtmlPurifierBehaviorTest extends TestCase
 
     public function testSaveEnabled()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $this->Behavior = new HtmlPurifierBehavior($table,[
             'events' => [
                 'Model.beforeSave' => true
@@ -165,7 +165,7 @@ class HtmlPurifierBehaviorTest extends TestCase
 
     public function testSaveConfigChange()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $this->Behavior = new HtmlPurifierBehavior($table,[
             'events' => [
                 'Model.beforeSave' => true
@@ -191,7 +191,7 @@ class HtmlPurifierBehaviorTest extends TestCase
 
     public function testSaveNoFields()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $this->Behavior = new HtmlPurifierBehavior($table,[
             'events' => [
                 'Model.beforeSave' => true
@@ -210,7 +210,7 @@ class HtmlPurifierBehaviorTest extends TestCase
 
     public function testCustomEvent()
     {
-        $table = $this->getMock('Cake\ORM\Table');
+        $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
         $this->Behavior = new HtmlPurifierBehavior($table,[
             'events'=>[
                 'Model.myCustomEvent' => true
