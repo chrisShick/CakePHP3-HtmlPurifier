@@ -5,12 +5,14 @@
     "keywords": ["cakephp", "cakephp3", "plugin", "htmlpurifier", "purifier", "fields", "entities"],
     "homepage": "https://github.com/chrisShick/CakePHP3-HtmlPurifier",
     "require": {
+      "cakephp/cakephp": "~3.6",
         "php": ">=5.4.0",
         "ezyang/htmlpurifier": "*"
     },
     "require-dev": {
-      "cakephp/cakephp": "~3.6",
-      "phpunit/phpunit": "^5.7.14|^6.0"
+      "phpunit/phpunit": "^5.7|^6.0",
+      "cakephp/cakephp-codesniffer": "dev-master",
+      "satooshi/php-coveralls": "dev-master"
     },
     "license": "MIT",
     "authors": [
