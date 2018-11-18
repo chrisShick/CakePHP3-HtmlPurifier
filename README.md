@@ -8,8 +8,8 @@ HTML Purifier is a standards-compliant HTML filter library written in PHP. HTML 
 ## Recognition
   I have to give credit to @josegonzalez for giving me the inspiration to write this based on his Purifiable Behavior.
 ## Requirements
-  - CakePHP 3.1.x
-  - PHP >= 5.4.16
+  - CakePHP >= 3.6.x
+  - PHP >= 5.6.0
   
 ## Installation
 
@@ -24,7 +24,7 @@ or add the plugin to your project's ``` composer.json ``` like this:
 ```
     {
         "require": {
-            "chrisshick/cakephp3-html-purifier": "dev-master"
+            "chrisshick/cakephp3-html-purifier": "~2.x"
         }
     }
 ```
