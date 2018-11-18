@@ -6,19 +6,18 @@
     "homepage": "https://github.com/chrisShick/CakePHP3-HtmlPurifier",
     "require": {
       "cakephp/cakephp": "~3.6",
-        "php": ">=5.6.0",
-        "ezyang/htmlpurifier": "*"
+      "php": ">=5.6.0",
+      "ezyang/htmlpurifier": "*"
     },
     "require-dev": {
       "phpunit/phpunit": "^5.7|^6.0",
-      "cakephp/cakephp-codesniffer": "dev-master",
-      "satooshi/php-coveralls": "dev-master"
+      "cakephp/cakephp-codesniffer": "dev-master"
     },
     "license": "MIT",
     "authors": [
         {
             "name": "Chris Hickingbottom",
-            "email": "chris@pharmedio.com"
+            "email": "chris.hickingbottom@gmail.com"
         }
     ],
     "autoload": {
