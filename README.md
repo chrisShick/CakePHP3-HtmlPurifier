@@ -1,5 +1,5 @@
 # CakePHP3-HtmlPurifier plugin
-[![Build Status](https://travis-ci.org/chrisShick/CakePHP3-HtmlPurifier.svg?branch=master)](https://travis-ci.org/chrisShick/CakePHP3-HtmlPurifier)
+[![Build Status](https://travis-ci.org/chrisShick/CakePHP3-HtmlPurifier.svg?branch=v2)](https://travis-ci.org/chrisShick/CakePHP3-HtmlPurifier)
 
 This plugin is a sanitizer for entity data that uses the Html Purifier Library: http://htmlpurifier.org/
 
