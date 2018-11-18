@@ -68,16 +68,16 @@ class HtmlPurifierBehavior extends Behavior
 
         foreach($merge_configs as $field) {
             if (isset($config[$field])) {
-                $this->config($field, $config[$field], false);
+                $this->setConfig($field, $config[$field], false);
             }
         }
         
         /* Ensure Definition ID is set for maybeGetRawHTMLDefinition() */
-        $definitionId = $this->config('config.HTML.DefinitionID') ?: 'purifiable';
-        $this->config('config.HTML.DefinitionID', $definitionId);
+        $definitionId = $this->setConfig('config.HTML.DefinitionID') ?: 'purifiable';
+        $this->setConfig('config.HTML.DefinitionID', $definitionId);
 
         /* Add custom HTML5 support, based on HTMLPurifier's HTML4 support */
-        $html5 = ($this->config('config.HTML.Doctype') === 'HTML 5');
+        $html5 = ($this->setConfig('config.HTML.Doctype') === 'HTML 5');
         if ($html5) {
             $this->config('config.HTML.Doctype', 'HTML 4.01 Transitional');
             $this->config('config.HTML.DefinitionID', $definitionId . '-html5');
@@ -85,12 +85,12 @@ class HtmlPurifierBehavior extends Behavior
 
         /* Create config and populate */
         $purifier_config = HTMLPurifier_Config::createDefault();
-        foreach ($this->config('config') as $namespace => $values) {
+        foreach ($this->setConfig('config') as $namespace => $values) {
             foreach ($values as $key => $value) {
                 $purifier_config->set("{$namespace}.{$key}", $value);
             }
         }
-        $customFilters = $this->config('customFilters');
+        $customFilters = $this->setConfig('customFilters');
         if (!empty($customFilters)) {
             $filters = array();
             foreach ($customFilters as $customFilter) {
