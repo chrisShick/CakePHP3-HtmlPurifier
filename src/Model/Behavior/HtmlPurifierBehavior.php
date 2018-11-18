@@ -1,10 +1,11 @@
 <?php
 namespace chrisShick\CakePHP3HtmlPurifier\Model\Behavior;
 
-use Cake\ORM\Behavior;
 use Cake\Event\Event;
+use Cake\ORM\Behavior;
 use HTMLPurifier;
 use HTMLPurifier_Config;
+
 /**
  * HtmlPurifier behavior
  */
@@ -42,7 +43,6 @@ class HtmlPurifierBehavior extends Behavior
         'customFilters' => []
     ];
 
-    
     /**
      * The purifier object.
      *
@@ -65,12 +65,12 @@ class HtmlPurifierBehavior extends Behavior
     {
         $merge_configs = ['events', 'fields', 'config', 'customFilters'];
 
-        foreach($merge_configs as $field) {
+        foreach ($merge_configs as $field) {
             if (isset($config[$field])) {
                 $this->setConfig($field, $config[$field], false);
             }
         }
-        
+
         /* Ensure Definition ID is set for maybeGetRawHTMLDefinition() */
         $definitionId = $this->getConfig('config.HTML.DefinitionID') ?: 'purifiable';
         $this->setConfig('config.HTML.DefinitionID', $definitionId);
@@ -91,7 +91,7 @@ class HtmlPurifierBehavior extends Behavior
         }
         $customFilters = $this->getConfig('customFilters');
         if (!empty($customFilters)) {
-            $filters = array();
+            $filters = [];
             foreach ($customFilters as $customFilter) {
                 $filters[] = new $customFilter;
             }
@@ -120,7 +120,7 @@ class HtmlPurifierBehavior extends Behavior
         $eventName = $event->getName();
         $events = $this->_config['events'];
 
-        if($events[$eventName] === true) {
+        if ($events[$eventName] === true) {
             $this->_purify($entity);
         }
 
@@ -138,24 +138,23 @@ class HtmlPurifierBehavior extends Behavior
         return array_fill_keys(array_keys($this->_config['events']), 'handleEvent');
     }
 
-
     /**
      * _purify
      *
      * The private method to purify the entity with the Html Purifier Library
      *
-     * @param $entity
-     *
+     * @param mixed $entity orm entity
+     * @return void
      */
     protected function _purify($entity)
     {
         $fields = $this->getConfig('fields');
-        $purify = function($value, $key, $entity) {
+        $purify = function ($value, $key, $entity) {
             if (isset($entity[$value])) {
                 $entity[$value] = $this->purifier->purify($entity[$value]);
             }
         };
-        array_walk($fields,$purify, $entity);
+        array_walk($fields, $purify, $entity);
     }
 
     /**
@@ -163,14 +162,16 @@ class HtmlPurifierBehavior extends Behavior
      *
      * Change HTML definition.
      *
-     * @param $def
-     * @param $html5 bool Add HTML5 definition
+     * @param \HTMLPurifier_HTMLDefinition $def definition for html purifier
+     * @param mixed $html5 bool Add HTML5 definition
      * See https://github.com/xemlock/htmlpurifier-html5
+     * @return void
      */
     protected function _editDefinition(\HTMLPurifier_HTMLDefinition $def, $html5)
     {
-        if (!$html5)
+        if (!$html5) {
             return;
+        }
 
         // http://developers.whatwg.org/sections.html
         $def->addElement('section', 'Block', 'Flow', 'Common');
@@ -190,16 +191,16 @@ class HtmlPurifierBehavior extends Behavior
         $def->addElement('figcaption', 'Inline', 'Flow', 'Common');
 
         // http://developers.whatwg.org/the-video-element.html#the-video-element
-        $def->addElement('video', 'Block', 'Optional: (source, Flow) | (Flow, source) | Flow', 'Common', array(
-            'src'      => 'URI',
-            'type'     => 'Text',
-            'width'    => 'Length',
-            'height'   => 'Length',
-            'poster'   => 'URI',
-            'preload'  => 'Enum#auto,metadata,none',
+        $def->addElement('video', 'Block', 'Optional: (source, Flow) | (Flow, source) | Flow', 'Common', [
+            'src' => 'URI',
+            'type' => 'Text',
+            'width' => 'Length',
+            'height' => 'Length',
+            'poster' => 'URI',
+            'preload' => 'Enum#auto,metadata,none',
             'controls' => 'Bool',
-        ));
-        $def->addElement('source', 'Block', 'Empty', 'Common', array('src' => 'URI', 'type' => 'Text'));
+        ]);
+        $def->addElement('source', 'Block', 'Empty', 'Common', ['src' => 'URI', 'type' => 'Text']);
 
         // http://developers.whatwg.org/text-level-semantics.html
         $def->addElement('s', 'Inline', 'Inline', 'Common');
@@ -210,12 +211,12 @@ class HtmlPurifierBehavior extends Behavior
         $def->addElement('wbr', 'Inline', 'Empty', 'Core');
 
         // http://developers.whatwg.org/edits.html
-        $def->addElement('ins', 'Block', 'Flow', 'Common', array('cite' => 'URI', 'datetime' => 'Text'));
-        $def->addElement('del', 'Block', 'Flow', 'Common', array('cite' => 'URI', 'datetime' => 'Text'));
+        $def->addElement('ins', 'Block', 'Flow', 'Common', ['cite' => 'URI', 'datetime' => 'Text']);
+        $def->addElement('del', 'Block', 'Flow', 'Common', ['cite' => 'URI', 'datetime' => 'Text']);
 
         // TIME
-        $time = $def->addElement('time', 'Inline', 'Inline', 'Common', array('datetime' => 'Text', 'pubdate' => 'Bool'));
-        $time->excludes = array('time' => true);
+        $time = $def->addElement('time', 'Inline', 'Inline', 'Common', ['datetime' => 'Text', 'pubdate' => 'Bool']);
+        $time->excludes = ['time' => true];
 
         // IMG
         $def->addAttribute('img', 'srcset', 'Text');
