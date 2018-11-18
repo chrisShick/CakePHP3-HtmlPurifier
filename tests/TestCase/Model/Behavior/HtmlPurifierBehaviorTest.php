@@ -21,7 +21,6 @@ class HtmlPurifierBehaviorTest extends TestCase
      */
     public $autoFixtures = false;
 
-
     /**
      * Sanity check Implemented events
      *
@@ -58,7 +57,7 @@ class HtmlPurifierBehaviorTest extends TestCase
     public function testMarshalBasic()
     {
         $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
-        $this->Behavior = new HtmlPurifierBehavior($table,['fields' => ['name','place']]);
+        $this->Behavior = new HtmlPurifierBehavior($table, ['fields' => ['name', 'place']]);
 
         $event = new Event('Model.beforeMarshal');
 
@@ -73,11 +72,11 @@ class HtmlPurifierBehaviorTest extends TestCase
     public function testMarshalFalse()
     {
         $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
-        $this->Behavior = new HtmlPurifierBehavior($table,[
-            'events'=>[
+        $this->Behavior = new HtmlPurifierBehavior($table, [
+            'events' => [
                 'Model.beforeMarshal' => false
             ],
-            'fields' => ['name','place']
+            'fields' => ['name', 'place']
         ]);
 
         $event = new Event('Model.beforeMarshal');
@@ -93,8 +92,8 @@ class HtmlPurifierBehaviorTest extends TestCase
     public function testMarshalConfigChange()
     {
         $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
-        $this->Behavior = new HtmlPurifierBehavior($table,[
-            'fields' => ['name','place'],
+        $this->Behavior = new HtmlPurifierBehavior($table, [
+            'fields' => ['name', 'place'],
             'config' => [
                 'AutoFormat' => [
                     'RemoveSpansWithoutAttributes' => false,
@@ -131,7 +130,7 @@ class HtmlPurifierBehaviorTest extends TestCase
     public function testSaveBasic()
     {
         $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
-        $this->Behavior = new HtmlPurifierBehavior($table,['fields' => ['name','place']]);
+        $this->Behavior = new HtmlPurifierBehavior($table, ['fields' => ['name', 'place']]);
 
         $event = new Event('Model.beforeSave');
         $expected = ['name' => 'Foo', 'place' => '<span>Bar</span>'];
@@ -146,11 +145,11 @@ class HtmlPurifierBehaviorTest extends TestCase
     public function testSaveEnabled()
     {
         $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
-        $this->Behavior = new HtmlPurifierBehavior($table,[
+        $this->Behavior = new HtmlPurifierBehavior($table, [
             'events' => [
                 'Model.beforeSave' => true
             ],
-            'fields' => ['name','place']
+            'fields' => ['name', 'place']
         ]);
 
         $event = new Event('Model.beforeSave');
@@ -166,11 +165,11 @@ class HtmlPurifierBehaviorTest extends TestCase
     public function testSaveConfigChange()
     {
         $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
-        $this->Behavior = new HtmlPurifierBehavior($table,[
+        $this->Behavior = new HtmlPurifierBehavior($table, [
             'events' => [
                 'Model.beforeSave' => true
             ],
-            'fields' => ['name','place'],
+            'fields' => ['name', 'place'],
             'config' => [
                 'AutoFormat' => [
                     'RemoveSpansWithoutAttributes' => false,
@@ -192,7 +191,7 @@ class HtmlPurifierBehaviorTest extends TestCase
     public function testSaveNoFields()
     {
         $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
-        $this->Behavior = new HtmlPurifierBehavior($table,[
+        $this->Behavior = new HtmlPurifierBehavior($table, [
             'events' => [
                 'Model.beforeSave' => true
             ],
@@ -211,11 +210,11 @@ class HtmlPurifierBehaviorTest extends TestCase
     public function testCustomEvent()
     {
         $table = $this->getMockBuilder('Cake\ORM\Table')->getMock();
-        $this->Behavior = new HtmlPurifierBehavior($table,[
-            'events'=>[
+        $this->Behavior = new HtmlPurifierBehavior($table, [
+            'events' => [
                 'Model.myCustomEvent' => true
             ],
-            'fields' => ['name','place']
+            'fields' => ['name', 'place']
         ]);
 
         $event = new Event('Model.myCustomEvent');
