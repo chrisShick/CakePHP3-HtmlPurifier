@@ -85,12 +85,12 @@ class HtmlPurifierBehavior extends Behavior
 
         /* Create config and populate */
         $purifier_config = HTMLPurifier_Config::createDefault();
-        foreach ($this->config('config') as $namespace => $values) {
+        foreach ($this->setConfig('config') as $namespace => $values) {
             foreach ($values as $key => $value) {
                 $purifier_config->set("{$namespace}.{$key}", $value);
             }
         }
-        $customFilters = $this->config('customFilters');
+        $customFilters = $this->setConfig('customFilters');
         if (!empty($customFilters)) {
             $filters = array();
             foreach ($customFilters as $customFilter) {
