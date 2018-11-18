@@ -1,5 +1,5 @@
 <?php
-namespace chrisShick\CakePHP3HtmlPurifier\Test\TestCase\Model\Behavior;
+namespace ChrisShick\CakePHP3HtmlPurifier\Test\TestCase\Model\Behavior;
 
 use Cake\Event\Event;
 use Cake\ORM\Entity;

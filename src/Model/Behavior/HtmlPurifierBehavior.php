@@ -1,5 +1,5 @@
 <?php
-namespace chrisShick\CakePHP3HtmlPurifier\Model\Behavior;
+namespace ChrisShick\CakePHP3HtmlPurifier\Model\Behavior;
 
 use Cake\Event\Event;
 use Cake\ORM\Behavior;
