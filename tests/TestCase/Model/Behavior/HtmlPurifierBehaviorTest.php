@@ -231,7 +231,7 @@ class HtmlPurifierBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Behavior);
 
