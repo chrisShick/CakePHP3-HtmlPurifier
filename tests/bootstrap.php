@@ -47,7 +47,3 @@ if (!getenv('db_dsn')) {
     putenv('db_dsn=sqlite:///:memory:');
 }
 ConnectionManager::setConfig('test', ['url' => getenv('db_dsn')]);
-
-Plugin::load('ChrisShick/CakePHP3HtmlPurifier', [
-    'path' => dirname(dirname(__FILE__)) . DS,
-]);
