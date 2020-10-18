@@ -61,7 +61,7 @@ class HtmlPurifierBehavior extends Behavior
      * @param array $config The config for this behavior.
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $merge_configs = ['events', 'fields', 'config', 'customFilters'];
 
@@ -133,7 +133,7 @@ class HtmlPurifierBehavior extends Behavior
      *
      * @return array
      */
-    public function implementedEvents()
+    public function implementedEvents(): array
     {
         return array_fill_keys(array_keys($this->_config['events']), 'handleEvent');
     }
